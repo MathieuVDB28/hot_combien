@@ -9,14 +9,14 @@ export default async function Hero() {
     const session = await getServerSession(authConfig);
 
     return (
-        <div className="flex flex-col flex-grow mt-40">
+        <div className="flex flex-col flex-grow mt-20 sm:mt-40">
             <div>
-                <h1 className="text-5xl text-[hsl(var(--foreground))] md:text-6xl font-extrabold leading-tighter tracking-tighter">
+                <h1 className="text-5xl text-[hsl(var(--foreground))] md:text-6xl text-center font-extrabold">
                     Prêts à relever les défis Hot Combien avec vos amis ?
                 </h1>
             </div>
 
-            <div className="flex flex-row items-center justify-center gap-40 mt-20">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-10 sm:gap-40 mt-20">
                 {session ? (
                     <OnlineModeButton />
                 ) : (
@@ -26,7 +26,7 @@ export default async function Hero() {
                 <OfflineModeButton />
             </div>
 
-            <div className="mt-20 w-full">
+            <div className="sm:mt-20 w-full">
                 <div className="flex flex-col items-center justify-center">
                     <Image
                         src="/img/hero.svg"
@@ -34,7 +34,7 @@ export default async function Hero() {
                         width={0}
                         height={0}
                         sizes="100vw"
-                        style={{width: '100%', height: '600px'}}
+                        className="w-full h-[300px] sm:h-[600px]"
                     />
                 </div>
             </div>

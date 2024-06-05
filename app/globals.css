@@ -31,6 +31,10 @@ body {
   background: var(--background);
 }
 
+.group-hover\:translate-x-0:hover .translate-x-full {
+   transform: translateX(0);
+ }
+
 @layer utilities {
   .text-balance {
     text-wrap: balance;
