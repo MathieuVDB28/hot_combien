@@ -18,14 +18,14 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-        <body className={inter.className}>
-        <main className="bg-[hsl(var(--background))] flex min-h-screen flex-col items-center justify-center pt-10 sm:pt-24 sm:pr-36 sm:pl-36 sm:pb-24">
-            <div className="flex flex-col items-center">
-                <Header/>
-                {children}
-            </div>
-        </main>
-        </body>
+            <body className={inter.className}>
+                <main className="bg-[hsl(var(--background))] flex min-h-screen flex-col items-center justify-center pt-10 sm:pt-24 sm:pr-36 sm:pl-36 sm:pb-24">
+                    <div className="flex flex-col items-center">
+                        <Header/>
+                        {children}
+                    </div>
+                </main>
+            </body>
         </html>
     );
 }
