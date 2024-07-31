@@ -5,32 +5,56 @@ import { Server } from "socket.io";
 const dev = process.env.NODE_ENV !== "production";
 const hostname = "localhost";
 const port = 3000;
-// when using middleware `hostname` and `port` must be provided below
 const app = next({ dev, hostname, port });
 const handler = app.getRequestHandler();
 
 app.prepare().then(() => {
     const httpServer = createServer(handler);
     const io = new Server(httpServer);
-    let rooms = [];
+    let rooms = new Set();
+
+    function updateRooms() {
+        const activeRooms = new Set();
+        for (const [id, socket] of io.of("/").sockets) {
+            for (const room of socket.rooms) {
+                if (room !== id) {  // Ignore the room that matches the socket id
+                    activeRooms.add(room);
+                }
+            }
+        }
+        rooms = activeRooms;
+        io.emit('roomList', Array.from(rooms));
+    }
 
     io.on("connection", (socket) => {
         console.log("Connection");
 
+        socket.emit('roomList', Array.from(rooms));
+
         socket.on('createRoom', (roomName) => {
-            rooms.push(roomName);
             socket.join(roomName);
-            io.emit('roomList', rooms);
+            rooms.add(roomName);
+            updateRooms();
         });
 
         socket.on('joinRoom', (roomName) => {
             socket.join(roomName);
             socket.to(roomName).emit('userJoined', roomName);
+            updateRooms();
         });
 
-        socket.on('joinRoom', (roomName) => {
-            socket.join(roomName);
-            socket.to(roomName).emit('userJoined', roomName);
+        socket.on('message', (data) => {
+            socket.to(data.room).emit('message', data.message);
+        });
+
+        socket.on('disconnecting', () => {
+            console.log('user disconnecting');
+            updateRooms();
+        });
+
+        socket.on('disconnect', () => {
+            console.log('user disconnected');
+            updateRooms();
         });
     });
 
